@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '../redux/slices/productSlice.js';
 import { fetchCategories } from '../redux/slices/categorySlice.js';
 import { Link } from 'react-router-dom';
-import { Search, SlidersHorizontal, Loader2, ArrowUpDown, Tag, Info } from 'lucide-react';
+import { Search, SlidersHorizontal, Loader2, ArrowUpDown, Tag, Info, Heart } from 'lucide-react';
+import { toggleWishlist } from '../redux/slices/wishlistSlice.js';
 
 const Catalog = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const Catalog = () => {
   // Redux state
   const { products, loading, page, pages, totalProducts } = useSelector((state) => state.product);
   const { categories } = useSelector((state) => state.category);
+  const { wishlistItems } = useSelector((state) => state.wishlist);
 
   // Filters state
   const [keyword, setKeyword] = useState('');
@@ -183,7 +185,7 @@ const Catalog = () => {
             {/* Price Filter */}
             <div className="mb-6">
               <h3 className="font-semibold text-gray-900 mb-3 text-sm flex items-center gap-1.5">
-                Price Range ($)
+                Price Range (₹)
               </h3>
               <form onSubmit={handlePriceFilterSubmit} className="space-y-3">
                 <div className="flex gap-2">
@@ -271,6 +273,17 @@ const Catalog = () => {
                         <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
                           {product.category?.name || 'Food'}
                         </span>
+                        {/* Wishlist Button */}
+                        <button
+                          onClick={() => dispatch(toggleWishlist(product))}
+                          className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm shadow-sm transition cursor-pointer ${
+                            wishlistItems.some(item => item._id === product._id)
+                              ? 'bg-red-50 text-red-500 hover:bg-red-100'
+                              : 'bg-white/90 text-gray-400 hover:text-red-500 hover:bg-white'
+                          }`}
+                        >
+                          <Heart size={14} className={wishlistItems.some(item => item._id === product._id) ? 'fill-red-500' : ''} />
+                        </button>
                         {/* Out of Stock overlay */}
                         {!product.inStock && (
                           <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] flex items-center justify-center">
@@ -294,7 +307,7 @@ const Catalog = () => {
 
                         <div className="mt-5 flex items-center justify-between">
                           <span className="text-xl font-extrabold text-gray-900">
-                            ${product.price.toFixed(2)}
+                            ₹{product.price.toFixed(2)}
                           </span>
                           <Link
                             to={`/product/${product._id}`}

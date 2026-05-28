@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice.js';
-import { Menu, X, ShoppingCart, User, Shield, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingCart, Heart, User, Shield, LogOut } from 'lucide-react';
+import { fetchCart } from '../redux/slices/cartSlice.js';
+import { fetchWishlist } from '../redux/slices/wishlistSlice.js';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,11 +12,20 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
+  const { wishlistItems } = useSelector((state) => state.wishlist);
+
+  useEffect(() => {
+    dispatch(fetchCart());
+    dispatch(fetchWishlist());
+  }, [dispatch, userInfo]);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/');
   };
+
+  const totalCartQty = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-100 shadow-sm transition-all duration-300">
@@ -42,6 +53,32 @@ const Navbar = () => {
               className="text-gray-700 hover:text-orange-500 font-medium transition duration-200"
             >
               Menu Catalog
+            </Link>
+
+            {/* Wishlist Link */}
+            <Link
+              to="/wishlist"
+              className="relative text-gray-700 hover:text-red-500 p-2 transition duration-200"
+            >
+              <Heart size={20} />
+              {wishlistItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-pulse">
+                  {wishlistItems.length}
+                </span>
+              )}
+            </Link>
+
+            {/* Cart Link */}
+            <Link
+              to="/cart"
+              className="relative text-gray-700 hover:text-orange-500 p-2 transition duration-200"
+            >
+              <ShoppingCart size={20} />
+              {totalCartQty > 0 && (
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
+                  {totalCartQty}
+                </span>
+              )}
             </Link>
 
             {/* Admin Dashboard link */}
@@ -88,8 +125,34 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center md:hidden">
+          {/* Mobile elements including cart and menu button */}
+          <div className="flex items-center gap-4 md:hidden">
+            {/* Wishlist Link Mobile */}
+            <Link
+              to="/wishlist"
+              className="relative text-gray-700 hover:text-red-500 p-2 transition duration-200"
+            >
+              <Heart size={20} />
+              {wishlistItems.length > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
+                  {wishlistItems.length}
+                </span>
+              )}
+            </Link>
+
+            {/* Cart Link Mobile */}
+            <Link
+              to="/cart"
+              className="relative text-gray-700 hover:text-orange-500 p-2 transition duration-200"
+            >
+              <ShoppingCart size={20} />
+              {totalCartQty > 0 && (
+                <span className="absolute top-0 right-0 bg-orange-500 text-white text-[9px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
+                  {totalCartQty}
+                </span>
+              )}
+            </Link>
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-orange-500 hover:bg-orange-50 focus:outline-none transition duration-200"

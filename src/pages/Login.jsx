@@ -19,9 +19,11 @@ const Login = () => {
     dispatch(clearAuthError());
     if (userInfo) {
       if (userInfo.role === 'admin') {
-        navigate('/admin');
-      } else {
         navigate(redirect);
+      } else {
+        // Prevent non-admin users from being redirected to admin routes
+        const safeRedirect = redirect.startsWith('/admin') ? '/catalog' : redirect;
+        navigate(safeRedirect);
       }
     }
   }, [userInfo, navigate, redirect, dispatch]);

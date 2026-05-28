@@ -27,8 +27,10 @@ const AdminDashboard = () => {
 
   // Guard routing
   useEffect(() => {
-    if (!userInfo || userInfo.role !== 'admin') {
+    if (!userInfo) {
       navigate('/login?redirect=/admin');
+    } else if (userInfo.role !== 'admin') {
+      navigate('/catalog');
     }
   }, [userInfo, navigate]);
 
@@ -278,7 +280,7 @@ const AdminDashboard = () => {
                             {prod.category?.name || 'Uncategorized'}
                           </span>
                         </td>
-                        <td className="py-4 px-6 font-extrabold text-gray-900">${prod.price.toFixed(2)}</td>
+                        <td className="py-4 px-6 font-extrabold text-gray-900">₹{prod.price.toFixed(2)}</td>
                         <td className="py-4 px-6">
                           {prod.isFeatured ? (
                             <span className="text-green-600 bg-green-50 px-2 py-0.5 rounded-md text-xs font-semibold">Yes</span>
@@ -408,7 +410,7 @@ const AdminDashboard = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Price ($)</label>
+                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Price (₹)</label>
                       <input
                         type="number"
                         step="0.01"

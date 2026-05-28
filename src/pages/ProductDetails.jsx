@@ -28,9 +28,20 @@ const ProductDetails = () => {
     setQuantity((prev) => prev + 1);
   };
 
+  const { wishlistItems } = useSelector((state) => state.wishlist);
+  const isWishlisted = wishlistItems.some(item => item._id === id);
+
   const handleAddToCart = () => {
-    // Phase 4 cart addition placeholder
-    alert(`Phase 4 Integration: Added ${quantity} ${product.name} to cart!`);
+    dispatch(import('../redux/slices/cartSlice.js').then(({ addToCart }) => {
+      dispatch(addToCart({ product, quantity }));
+      alert(`Added ${quantity} ${product.name} to cart!`);
+    }));
+  };
+
+  const handleWishlistToggle = () => {
+    dispatch(import('../redux/slices/wishlistSlice.js').then(({ toggleWishlist }) => {
+      dispatch(toggleWishlist(product));
+    }));
   };
 
   if (loading) {
@@ -126,7 +137,7 @@ const ProductDetails = () => {
               {/* Price */}
               <div className="border-t border-b border-gray-100 py-4 mb-6">
                 <span className="text-3xl font-extrabold text-gray-900">
-                  ${product.price.toFixed(2)}
+                  ₹{product.price.toFixed(2)}
                 </span>
               </div>
             </div>
@@ -165,8 +176,15 @@ const ProductDetails = () => {
                     <ShoppingBag size={18} />
                     Add to Cart
                   </button>
-                  <button className="border border-gray-200 hover:border-red-200 hover:bg-red-50 text-gray-400 hover:text-red-500 p-3.5 rounded-full transition cursor-pointer">
-                    <Heart size={18} />
+                   <button
+                    onClick={handleWishlistToggle}
+                    className={`border p-3.5 rounded-full transition cursor-pointer ${
+                      isWishlisted
+                        ? 'border-red-200 bg-red-50 text-red-500 hover:bg-red-100'
+                        : 'border-gray-200 text-gray-400 hover:border-red-200 hover:bg-red-50 hover:text-red-500'
+                    }`}
+                  >
+                    <Heart size={18} className={isWishlisted ? 'fill-red-500' : ''} />
                   </button>
                 </div>
               </div>

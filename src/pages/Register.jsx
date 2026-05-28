@@ -21,7 +21,9 @@ const Register = () => {
   useEffect(() => {
     dispatch(clearAuthError());
     if (userInfo) {
-      navigate(redirect);
+      // Prevent non-admin users from being redirected to admin routes
+      const safeRedirect = (userInfo.role !== 'admin' && redirect.startsWith('/admin')) ? '/catalog' : redirect;
+      navigate(safeRedirect);
     }
   }, [userInfo, navigate, redirect, dispatch]);
 
