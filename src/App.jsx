@@ -10,6 +10,9 @@ import Register from './pages/Register.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import Cart from './pages/Cart.jsx';
 import Wishlist from './pages/Wishlist.jsx';
+import Checkout from './pages/Checkout.jsx';
+import OrderDetails from './pages/OrderDetails.jsx';
+import OrderHistory from './pages/OrderHistory.jsx';
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order/:id" element={<OrderDetails />} />
+              <Route path="/orders/history" element={<OrderHistory />} />
             </Routes>
           </main>
         </div>

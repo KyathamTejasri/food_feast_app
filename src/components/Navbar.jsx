@@ -95,6 +95,12 @@ const Navbar = () => {
             {/* Auth / Profile */}
             {userInfo ? (
               <div className="flex items-center gap-4">
+                <Link
+                  to="/orders/history"
+                  className="text-gray-700 hover:text-orange-500 font-medium transition duration-200"
+                >
+                  My Orders
+                </Link>
                 <div className="flex items-center gap-2 text-gray-700 bg-gray-50 border border-gray-200/60 px-3.5 py-1.5 rounded-full">
                   <User size={16} className="text-orange-500" />
                   <span className="font-medium text-sm">{userInfo.name}</span>
@@ -195,6 +201,13 @@ const Navbar = () => {
 
             {userInfo ? (
               <div className="border-t border-gray-100 pt-4 pb-2 px-3 space-y-2">
+                <Link
+                  to="/orders/history"
+                  onClick={() => setIsOpen(false)}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-orange-50 transition"
+                >
+                  My Orders
+                </Link>
                 <div className="flex items-center gap-2 text-gray-700">
                   <User size={18} className="text-orange-500" />
                   <span className="font-semibold">{userInfo.name}</span>

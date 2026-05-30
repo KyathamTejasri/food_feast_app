@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@reduxjs/toolkit": "^2.12.0",
     "axios": "^1.16.1",
+    "directory-tree": "^3.6.0",
     "framer-motion": "^12.39.0",
     "lucide-react": "^1.16.0",
     "react": "^19.2.6",

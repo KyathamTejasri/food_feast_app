@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus } from 'lucide-react';
 import { fetchCart, updateCartQty, removeFromCart, clearCart } from '../redux/slices/cartSlice.js';
+import {useNavigate} from 'react-router-dom';
 
 const Cart = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cartItems, loading } = useSelector((state) => state.cart);
 
@@ -188,7 +190,7 @@ const Cart = () => {
               </div>
 
               <button
-                onClick={() => alert('Order Placed Successfully! This is a demo checkout.')}
+                onClick={() => navigate('/checkout')}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl shadow-md shadow-orange-500/20 hover:shadow-lg transition duration-200 cursor-pointer"
               >
                 Proceed to Checkout
